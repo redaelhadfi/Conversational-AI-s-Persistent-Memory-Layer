@@ -1,0 +1,62 @@
+# Docker Compose override for production
+version: '3.8'
+
+services:
+  api:
+    restart: always
+    environment:
+      - ENVIRONMENT=production
+      - DEBUG=false
+      - LOG_LEVEL=INFO
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    
+  postgres:
+    restart: always
+    volumes:
+      - postgres_prod_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: memory_db_prod
+      POSTGRES_USER: memory_user
+      # Use secrets in production
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    secrets:
+      - postgres_password
+  
+  qdrant:
+    restart: always
+    volumes:
+      - qdrant_prod_data:/qdrant/storage
+    environment:
+      - QDRANT__SERVICE__HTTP_PORT=6333
+      # Enable authentication in production
+      - QDRANT__SERVICE__API_KEY_FILE=/run/secrets/qdrant_api_key
+    secrets:
+      - qdrant_api_key
+
+  # Add nginx for reverse proxy
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/ssl:/etc/nginx/ssl
+    depends_on:
+      - api
+    restart: always
+
+secrets:
+  postgres_password:
+    file: ./secrets/postgres_password.txt
+  qdrant_api_key:
+    file: ./secrets/qdrant_api_key.txt
+
+volumes:
+  postgres_prod_data:
+  qdrant_prod_data:

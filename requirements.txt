@@ -1,0 +1,49 @@
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+pydantic-settings==2.1.0
+sqlalchemy==2.0.23
+alembic==1.12.1
+asyncpg==0.29.0
+psycopg2-binary==2.9.7
+
+# Vector Database
+qdrant-client==1.6.9
+
+# ML/AI
+openai==1.3.5
+sentence-transformers==2.2.2
+numpy==1.24.3
+scikit-learn==1.3.2
+
+# HTTP & Async
+httpx==0.25.2
+aiofiles==23.2.1
+python-multipart==0.0.6
+
+# Security & Auth
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-dotenv==1.0.0
+
+# Monitoring & Logging
+prometheus-client==0.19.0
+structlog==23.2.0
+
+# Testing
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-cov==4.1.0
+httpx==0.25.2
+factory-boy==3.3.0
+
+# Redis (optional)
+redis==5.0.1
+hiredis==2.2.3
+
+# Utilities
+python-dateutil==2.8.2
+click==8.1.7
+
+
+requests
